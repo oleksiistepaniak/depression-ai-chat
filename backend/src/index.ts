@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import dotenv from 'dotenv';
-import chatRoutes from "./routes/chatRoutes";
+import chatRoutes from "./routes/ChatRoutes";
 
 dotenv.config();
 
