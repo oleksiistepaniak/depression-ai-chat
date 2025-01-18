@@ -9,7 +9,7 @@ export async function sendMessage(request: FastifyRequest<{ Body: { message: str
     }
 
     try {
-        const response = await generateResponse(message);
+        const response = await generateResponse(request, message);
         reply.send({response});
     } catch (error: any) {
         reply.status(500).send({error: error.message})

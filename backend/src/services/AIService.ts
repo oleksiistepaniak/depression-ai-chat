@@ -1,11 +1,11 @@
-export const generateResponse = async (message: string): Promise<string> => {
-    const apiKey = process.env.GEMINI_API_KEY;
+import {FastifyRequest} from "fastify";
 
-    if (!apiKey) {
-        throw new Error("Gemini API key is missing");
-    }
+export const generateResponse = async (request: FastifyRequest, message: string): Promise<string> => {
+    const apiKey = request.server.appConfig.GEMINI_API_KEY;
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=";
+    const prompt = "Respond in a depressive style in the language I used to address you after this message: ";
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    const response = await fetch(`${url}${apiKey}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -15,7 +15,7 @@ export const generateResponse = async (message: string): Promise<string> => {
                 {
                     parts: [
                         {
-                            text: "Respond in a depressive style in the language I used to address you after this message:" + message,
+                            text: prompt + message,
                         },
                     ],
                 },
