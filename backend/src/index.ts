@@ -6,7 +6,7 @@ import {validateEnv} from "./helpers/EnvCheck";
 import rootRoutes from "./routes/RootRoutes";
 
 dotenv.config();
-const server = Fastify();
+export const server = Fastify();
 
 // creating global dependencies
 const appConfig = new AppConfig(process.env.GEMINI_API_KEY, process.env.PORT);

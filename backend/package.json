@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsx src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require tsx --recursive --exit 'test/**/*.test.ts'"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +20,13 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.7",
+    "@types/should": "^11.2.0",
+    "@types/supertest": "^6.0.2",
+    "mocha": "^11.0.1",
+    "should": "^13.2.3",
+    "supertest": "^7.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   }
