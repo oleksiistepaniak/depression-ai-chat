@@ -26,4 +26,10 @@ describe("sendMessage.test", () => {
             });
         }
     });
+
+    it("success", async () => {
+        const message = "Hi, could you assist me with the difference between JS and TS?";
+        const reply = await supertest(server.server).post("/chat").send({message}).expect(200);
+        should(reply.body.response.length).above(1);
+    });
 });
