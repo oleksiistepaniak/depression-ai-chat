@@ -5,13 +5,16 @@ import {AppConfig} from "./configs/AppConfig";
 import {validateEnv} from "./helpers/EnvCheck";
 import rootRoutes from "./routes/RootRoutes";
 import fastifyCors from "@fastify/cors";
+import {AppDb} from "./database/AppDb";
 
 dotenv.config();
 export const server = Fastify();
 
 // creating global dependencies
-const appConfig = new AppConfig(process.env.GEMINI_API_KEY, process.env.PORT);
+const appConfig = new AppConfig(process.env.GEMINI_API_KEY, process.env.PORT, process.env.DB_URL);
 server.decorate("appConfig", appConfig);
+const appDb = new AppDb();
+server.decorate("appDb", appDb);
 
 // configuring cors
 server.register(fastifyCors, {
@@ -28,11 +31,12 @@ server.register(rootRoutes);
 validateEnv();
 
 // running of the server
-server.listen({port: +appConfig.PORT}, (err, address) => {
+server.listen({port: +appConfig.PORT}, async (err, address) => {
     if (err) {
         console.error(err);
         process.exit(1);
     }
+    await appDb.init();
     console.log("GEMINI_API_KEY is provided");
     console.log(`Server running at ${address}`);
 });
