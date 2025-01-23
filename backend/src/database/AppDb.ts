@@ -1,13 +1,13 @@
 import {Collection, Db, MongoClient} from "mongodb";
 import {AccountRecord} from "./interfaces";
-import {server} from "../index";
+import {FastifyInstance} from "fastify";
 
 export class AppDb {
     private readonly _client: MongoClient;
     private readonly _db: Db;
     private readonly _accountsCollection: Collection<AccountRecord>;
 
-    constructor() {
+    constructor(server: FastifyInstance) {
         this._client = new MongoClient(server.appConfig.DB_URL);
         this._db = this._client.db();
         this._accountsCollection = this._db.collection("accounts");
@@ -17,7 +17,7 @@ export class AppDb {
         return this._accountsCollection;
     }
 
-    async init() {
+    async init(server: FastifyInstance) {
         try {
             console.log(`Trying to connect to MongoDB. URL: ${server.appConfig.DB_URL}`);
             await this._client.connect();

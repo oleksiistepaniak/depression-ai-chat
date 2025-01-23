@@ -13,7 +13,7 @@ export const server = Fastify();
 // creating global dependencies
 const appConfig = new AppConfig(process.env.GEMINI_API_KEY, process.env.PORT, process.env.DB_URL);
 server.decorate("appConfig", appConfig);
-const appDb = new AppDb();
+const appDb = new AppDb(server);
 server.decorate("appDb", appDb);
 
 // configuring cors
@@ -36,7 +36,7 @@ server.listen({port: +appConfig.PORT}, async (err, address) => {
         console.error(err);
         process.exit(1);
     }
-    await appDb.init();
+    await appDb.init(server);
     console.log("GEMINI_API_KEY is provided");
     console.log(`Server running at ${address}`);
 });
