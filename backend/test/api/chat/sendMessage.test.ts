@@ -1,18 +1,18 @@
 import supertest from "supertest";
-import {server} from "../../../src";
+import {fastify} from "../../../src";
 import {after, before} from "node:test";
 
 describe("sendMessage.test", () => {
     before(async () => {
-        await server.listen();
+        await fastify.listen();
     });
 
     after(async () => {
-        await server.close();
+        await fastify.close();
     });
 
     it("empty_request_body", async () => {
-        const reply = await supertest(server.server).post("/chat").send({}).expect(400);
+        const reply = await supertest(fastify.server).post("/chat").send({}).expect(400);
         should(reply.body).deepEqual({
             error: "empty_request_body",
         });
@@ -20,7 +20,7 @@ describe("sendMessage.test", () => {
 
     it("empty_message", async () => {
         for (const message of [null, "", NaN, 0]) {
-            const reply = await supertest(server.server).post("/chat").send({message}).expect(400);
+            const reply = await supertest(fastify.server).post("/chat").send({message}).expect(400);
             should(reply.body).deepEqual({
                 error: "empty_message",
             });
@@ -29,7 +29,7 @@ describe("sendMessage.test", () => {
 
     it("success", async () => {
         const message = "Hi, could you assist me with the difference between JS and TS?";
-        const reply = await supertest(server.server).post("/chat").send({message}).expect(200);
+        const reply = await supertest(fastify.server).post("/chat").send({message}).expect(200);
         should(reply.body.response.length).above(1);
     });
 });
